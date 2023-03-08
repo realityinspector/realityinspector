@@ -1,0 +1,87 @@
+
+# def recursive_summary(iter=0):
+#   global token_count
+#   if iter == 0:
+#     with open("input.txt") as file:
+#       text = file.read()
+#   else:
+#     files = os.listdir("recursive summaries folder")
+#     last_folder = files[-1]
+#     text = ""
+#     for file in os.listdir("recursive summaries folder/" + last_folder):
+#       with open("recursive summaries folder/" + last_folder + "/" + file) as f:
+#         text += f.read() + "\n"
+#   if len(text.split()) > WORD_COUNT:
+#     text = chunk_(text, WORD_COUNT)
+#   else:
+#     if iter == 0:
+#       data = summarize(text, MAX_RESPONSE_TOKENS, PROMPT)
+#     else:
+#       data = summarize(text, MAX_RESPONSE_TOKENS, SUMMARY_PROMPT)
+#     token_count += data["token_usage"]
+#     summary_text = data["text"]
+#     path = os.path.join("recursive summaries folder", f"iter {len(os.listdir('recursive summaries folder'))}")
+#     os.makedirs(path, exist_ok=True)
+#     filepath = os.path.join(path, "file_1.txt")
+#     with open(filepath, "w") as file:
+#       file.write(summary_text)
+
+
+# def summarize_summaries():
+#   for file in os.listdir("summary_of_summaries"):
+#     os.remove("summary_of_summaries/" + file)
+#   chunks = chunk_(concat_all_summaries(), 1900)
+#   summary_tokens = 0
+#   for i, chunk in enumerate(chunks):
+#     print("Summarizing chunk %s of %s" % (i + 1, len(chunks)))
+#     summary = summarize(chunk, MAX_RESPONSE_TOKENS, SUMMARY_PROMPT)
+#     if not summary["success"]:
+#       print("Error summarizing chunk %s" % i)
+#     else:
+#       print("Successfully summarized chunk %s of %s" % (i + 1, len(chunks)))
+#       with open("summary_of_summaries/chunk_" + str(i + 1) + ".txt",
+#                 "w") as file:
+#         file.write(summary["text"])
+#       summary_tokens += summary["token_usage"]
+#   return summary_tokens
+
+
+# def summarize_all():
+#   tokens = 0
+#   for i, chunk_file in enumerate(os.listdir("output")):
+#     print("Summarizing chunk %s of %s" % (i + 1, len(os.listdir("output"))))
+#     with open("output/" + chunk_file) as file:
+#       text = file.read()
+#     data = summarize(text, MAX_RESPONSE_TOKENS, PROMPT)
+#     tokens += data["token_usage"]
+#     if not data["success"]:
+#       print(data["message"])
+#     with open("summaries/" + chunk_file, "w") as file:
+#       file.write(data["text"])
+#     print("Summarized chunk %s of %s" % (i + 1, len(os.listdir("output"))))
+#   return tokens
+
+# def concat_all_summaries():
+#   print("Concatenating all summaries...")
+#   all = ""
+#   for summary in os.listdir("summaries"):
+#     with open("summaries/" + summary) as file:
+#       text = "\n".join(file.read().split("\n")[3:])
+#     all += text + "\n"
+#   return all
+
+# def print_dict(dictionary, pre=""):
+#   for k, v in dictionary.items():
+#     if type(v) == dict:
+#       print(pre + k + ": ")
+#       print_dict(v, pre=pre + "    ")
+#     elif type(v) == list:
+#       print(pre + k + ": [")
+#       for item in v:
+#         if type(item) == dict:
+#           print_dict(item, pre=pre + "    ")
+#         else:
+#           print(pre + "    " + item)
+#       print(pre + "]")
+#     else:
+#       print(pre + k + ": " + str(v).strip())
