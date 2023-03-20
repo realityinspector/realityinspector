@@ -1,0 +1,19 @@
+You can use your own color list if you want. The colors are: /n/n"
+		print color_list
+		return color_list
+	
+	def get_words(self):
+		words_list = []
+		for i in self.color_list:
+			words_list.append(raw_input(i))
+		print "Thank you for your help, the AI will take it from here."
+		return words_list
+
+	def translate_colors(self):
+		rgb_dict = {}
+		#rgb_dict = {"red":[0,0,255],"green":[0,255,0],"blue":[255,0,0],"yellow":[255,255,0],"purple":[255,0,255],"orange":[255,255,0]}
+		for key in self.color_list:
+			if key == "105,90,63":
+				rgb_dict[key] = "brown"
+			elif key == "47,71,140":
+				rgb

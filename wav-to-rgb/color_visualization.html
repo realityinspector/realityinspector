@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Visualization</title>
+<style>
+    body { font-family: Arial, sans-serif; }
+    .color-container { display: flex; flex-wrap: wrap; }
+    .color-box {
+        width: 150px;
+        height: 150px;
+        margin: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #000;
+        border-radius: 5px;
+    }
+</style>
+<script>
+    function loadCsvFile() {
+        var selectedFile = document.getElementById("csvFileSelect").value;
+        if (selectedFile) {
+            window.location.href = window.location.pathname + "?file=" + encodeURIComponent(selectedFile);
+        }
+    }
+</script>
+</head>
+<body>
+<h1>Color Visualization</h1>
+<label for="csvFileSelect">Choose a CSV file:</label>
+<select id="csvFileSelect" onchange="loadCsvFile()">
+    <option value="">--Select a file--</option>
+    <option value="fft_data.csv">fft_data.csv</option><option value="rgb_stats.csv">rgb_stats.csv</option><option value="rgb_scores.csv">rgb_scores.csv</option>
+</select>
+<div class="color-container">
+<div class="color-box" style="background-color: rgb(105, 90, 63);"><span>Mean</span></div><div class="color-box" style="background-color: rgb(105, 90, 63);"><span>Average</span></div><br><div class="color-box" style="background-color: rgb(47, 71, 140);"><span>Least Frequent</span></div><br><div class="color-box" style="background-color: rgb(47, 71, 140);"><span>Top 1</span></div><div class="color-box" style="background-color: rgb(108, 78, 73);"><span>Top 2</span></div><div class="color-box" style="background-color: rgb(108, 72, 78);"><span>Top 3</span></div><br><div class="color-box" style="background-color: rgb(108, 97, 53);"><span>Top 4</span></div><div class="color-box" style="background-color: rgb(109, 124, 25);"><span>Top 5</span></div><div class="color-box" style="background-color: rgb(109, 76, 72);"><span>Top 6</span></div><br><div class="color-box" style="background-color: rgb(109, 112, 36);"><span>Top 7</span></div><div class="color-box" style="background-color: rgb(107, 111, 40);"><span>Top 8</span></div><div class="color-box" style="background-color: rgb(110, 71, 77);"><span>Top 9</span></div><br><div class="color-box" style="background-color: rgb(111, 117, 30);"><span>Top 10</span></div><div class="color-box" style="background-color: rgb(111, 115, 32);"><span>Top 11</span></div><div class="color-box" style="background-color: rgb(111, 112, 35);"><span>Top 12</span></div>
+</div>
+</body>
+</html>

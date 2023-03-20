@@ -1,0 +1,8 @@
+jtype: Flow
+version: '1'
+pods:
+  - name: encoder
+    uses: encoder.yml
+  - name: indexer
+    uses: indexer.yml
+    needs: encoder

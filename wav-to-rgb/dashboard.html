@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio Analysis Dashboard</title>
+<script>
+    function analyzeFile() {
+        var selectedFile = document.getElementById("audioFileSelect").value;
+        if (selectedFile) {
+            window.location.href = window.location.pathname + "?file=" + encodeURIComponent(selectedFile);
+        }
+    }
+</script>
+</head>
+<body>
+<h1>Audio Analysis Dashboard</h1>
+<label for="audioFileSelect">Choose a .wav or .mp4 file:</label>
+<select id="audioFileSelect">
+    <option value="">--Select a file--</option>
+    <option value="example.wav">example.wav</option>
+</select>
+<button onclick="analyzeFile()">Analyze</button>
+</body>
+</html>

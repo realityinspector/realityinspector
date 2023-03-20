@@ -1,0 +1,13 @@
+jtype: SimpleIndexer
+metas:
+  name: myindexer
+  workspace: ./
+  py_modules:
+    - '__init__.py'
+components:
+  - jtype: GPTSimpleVectorIndex
+    metas:
+      name: myindexer
+    requests:
+      on:
+        [SearchRequest]

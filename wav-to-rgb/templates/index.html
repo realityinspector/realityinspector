@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio File Processing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        iframe {
+            border: none;
+        }
+
+        #openai-output {
+            display: inline-block;
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f8f8f8;
+            cursor: pointer;
+        }
+
+        #rgb2txt-output {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+        .loading-spinner {
+            display: inline-block;
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Audio File Processing Demo</h1>
+        <form id="upload-form">
+            <input type="file" id="audio_file" name="audio_file">
+            <button type="submit" id="submit-button">Submit</button>
+        </form>
+
+        <h2>Visualization</h2>
+        <iframe id="visualization-frame" style="width: 100%; height: 600px;"></iframe>
+
+        <h2>RGB2TXT Output</h2>
+        <pre id="rgb2txt-output"></pre>
+
+        <h2>OpenAI Output</h2>
+        <div id="openai-output-container">
+            <div id="loading-spinner" class="loading-spinner" style="display:none;"></div>
+            <pre id="openai-output"></pre>
+        </div>
+
+        <script>
+        document.getElementById("submit-button").addEventListener("click", function (event) {
+    event.preventDefault();
+
+    console.log("Submit button clicked"); // Add this line
+
+    const form = document.getElementById("upload-form");
+    const formData = new FormData(form);
+    const fileInput = document.getElementById("audio_file");
+    const file = fileInput.files[0];
+
+    if (file) {
+        formData.append("wav_file", file);
+
+        console.log("Sending fetch request to /process_wav"); // Add this line
+
+        fetch("/process_wav", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Fetch request successful"); // Add this line
+                
+                const rgbValues = data.rgb_values;
+
+                // Update the visualization
+                document.getElementById("visualization-frame").src = "/visualization";
+
+                // Update the rgb2txt output
+                document.getElementById("rgb2txt-output").innerHTML = rgbValues.join(", ");
+
+                // Show the loading spinner
+                document.getElementById("loading-spinner").style.display = "inline-block";
+
+                // Automatically send the output to OpenAI
+                fetch("/send_to_openai", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ txt_file: "rgb_colors.txt" }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const generatedText = data.generated_text;
+
+                        // Hide the loading spinner
+                        document.getElementById("loading-spinner").style.display = "none";
+
+                        // Show the OpenAI output
+                        document.getElementById("openai-output").innerHTML = generatedText;
+                    });
+            });
+    }
+});
+</script>

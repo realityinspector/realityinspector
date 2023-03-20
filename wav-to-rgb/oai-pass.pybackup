@@ -1,0 +1,65 @@
+import os
+import csv
+import openai
+
+# Set up OpenAI API client
+api_key = "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"
+openai.api_key = api_key
+
+def read_data_from_csv(filename):
+    data = []
+    with open(filename, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip header
+        for row in reader:
+            try:
+                data.append([float(value) for value in row[1:]])
+            except ValueError:
+                continue
+
+    return data
+
+def generate_prompt_text(rgb_stats_file):
+    data = read_data_from_csv(rgb_stats_file)
+    rgb_values_text = ''.join(['({}, {}, {})'.format(*row) for row in data])
+    prompt = f"Ignore all previous color values. Given the following RGB color values, please provide a plain English description of each color: {rgb_values_text}"
+    return prompt
+
+def request_openai_response(prompt):
+    response = openai.Completion.create(
+        engine="davinci",
+        prompt=prompt,
+        max_tokens=150,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    return response.choices[0].text.strip()
+
+def process_response_text(response_text):
+    descriptions = [desc.strip() for desc in response_text.split(',') if desc.strip()]
+    return descriptions
+
+
+def write_output_to_file(output_text, filename):
+    with open(filename, "w") as file:
+        file.write(output_text)
+
+def main():
+    chosen_file = 'rgb_stats.csv'
+    if not os.path.isfile(chosen_file):
+        print(f"Could not find {chosen_file} in the local folder.")
+        return
+
+    prompt = generate_prompt_text(chosen_file)
+    response_text = request_openai_response(prompt)
+    print("Generated text:", response_text)
+
+    descriptions = process_response_text(response_text)
+    output_text = ', '.join(descriptions)
+    output_filename = "output.txt"
+    write_output_to_file(output_text, output_filename)
+    print(f"Output saved to {output_filename}")
+
+if __name__ == '__main__':
+    main()
